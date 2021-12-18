@@ -6,28 +6,23 @@ def twoOpt(liste):
     i = int(random()*(l-3))
 # ici l-3 car sinon (l-2 jusiqu'à l-1) on tombera dans une boucle infinie
 #lorsqu'on veut trouver j
-    j=i
+    j= (i*int(random()*(l)))%(l)
     
-    while  j<=i:
-        j = int(random()*(l-1))
-        if j<i:
-            tmp=i
-            i=j
-            j=tmp
-            break
-
+    if i>j:
+        tmp = i
+        i=j
+        j=tmp
     
-    tmp = liste.copy()
+    tmp = liste[:]
 #Diviser la liste en trois parties
     part1= tmp[:i]
     part2= tmp[i:j+1]
     part3= tmp[j+1:]
 #renverser l'ordre de la partie au milieu
-    part2.reverse()
+    part2 = part2[-1::-1]
 
 #reconstruire la liste pour un voisin dans 2-opt    
     return part1+part2+part3
-
 
 def insert(liste):
     l = len(liste)
@@ -40,7 +35,7 @@ def insert(liste):
     
 #choisir un élément aléatoirement le mettre dans une autre position aléatoire
     
-    tmp = liste.copy()
+    tmp = liste[:]
     tmp.remove(liste[i])
     tmp.insert(j,liste[i])
     
@@ -56,7 +51,7 @@ def swap(liste):
         j = int(random()*(l-1))
 
 #choisir deux éléments aléatoirement et echanger leurs positions
-    tmp = liste.copy()
+    tmp = liste[:]
     tmp.remove(liste[i])
     tmp.remove(liste[j])
     tmp.insert(i,liste[j])
@@ -65,4 +60,6 @@ def swap(liste):
     return tmp
 
 
-    
+
+
+    	

@@ -1,40 +1,5 @@
 from operator import itemgetter
-
-
-def getData(path):
-    data = []
-
-    filee = open(path,"r")
-
-    line1=filee.readline()
-    line2=filee.readline()
-    line3=filee.readline()
-
-    filee.close()
-        
-    line1=line1.replace("\t", " ")
-    n=int(line1.split(" ")[0])
-
-
-    line2=line2.replace("\t", " ")
-    line2=line2.replace("\n", " ")
-    line2=line2.split(" ")
-
-
-    line3=line3.replace("\t", " ")
-    line3=line3.replace("\n", " ")
-    line3=line3.split(" ")
-
-
-    for i in range(1,n+1):
-        tmp=[]
-        tmp.append(i)
-        tmp.append(int(line2[i-1]))
-        tmp.append(int(line3[i-1]))
-        data.append(tmp)
-
-
-    return data 
+from dataExtractor import getData3
 
 
 
@@ -52,7 +17,37 @@ def moore(tasks,n):
     else:
       somme=somme+x[1]
   return V
-T = getData('../instances/P1_n50.txt')
 
-print("NbRetard",len(moore(T,len(T))))
+T = getData3('../instances/P1_n50.txt')
+
+print(len(moore(T,len(T))))
+
+
+
+
+"""
+T=[
+   [1,24,57],
+   [2,1,144 ],
+   [3,47,46],
+   [4,48,214],
+   [5,4,162],
+   [6,23,96],
+   [7,41,219],
+   [8,18,235],
+   [9,19,74],
+   [10,50,184],
+   [11,12,14],
+   [12,30,36],
+   [13,15,9],
+   [14,60,38],
+   [15,57,24],
+   [16,144,1 ],
+   [17,46,48],
+   [18,214,214],
+   [19,162,50],
+   [20,96,96],
+]
+"""
+
 

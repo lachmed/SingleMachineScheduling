@@ -1,42 +1,57 @@
 from itertools import combinations
-from dataExtractor import getData
+from dataExtractor import getData2
 import time
 
 
 #Cette fonction permetra de mettre un element j d'une séquance J à la fin de cette séquance
 def putLast(S,J,j):
-    J2 = J[:]
+    J2 = J[:] 
     J2.remove(j)
     J2.append(j)
 #on enlève j de sa position et on le met à la fin
     return J2
 
 #cette fonction va retourner 1 si j qui est à l fin est enretard et 0 sinon
-def calculateTardiness(S,J,j):
-    global res 
-#on utilisera le dictionnaire global res qui contient les informations sur les sous séquances précédentes    
+def calculerFonctionObjective(S,J,j):
     if S == 1:
-#Si la taille de la séquance est 1 alors une simple comaraison entre pj (data[j][0]) et dj (data[j][01) 
-#pour voir si j est en retadr ou non
         if data[j][0]>data[j][1]:
-            return 1
+            T = 1 
+            E = 0
+        elif data[j][0]>data[j][1]:
+            T = 0
+            E = 0
         else:
-            return 0
-#si la taille est 2 alors voir si les deux taches sont en retard ou pas    
-    if S==2:
-        t=0
-        if data[J[0]][0] > data[J[0]][1]:
-            t+=1
-        if data[J[0]][0] + data[J[1]][0] > data[J[0]][1]:
-            t+=1
-        return t
-# si la taille>2 alors utiliser le dictionnaire res pour calculer le temps de fin de la séquance
-#qui précède j et on ajoute pj pour savoir si j sera en retadrd ou non    
-    if res[tuple(J[:S-1])][0] + data[j][0] > data[j][1]:
-        return 1
-    else:
-        return 0
+            T = 0
+            E = 1
         
+        return (data[j][2]*E) + (data[j][3]*T)
+        
+    if S==2:
+        r1 = calculerFonctionObjective(1,J[:1],J[0])
+        if data[J[0]][0] + data[J[1]][0] > data[J[1]][1]:
+            T=1
+            E=0
+        elif data[J[0]][0] + data[J[1]][0] == data[J[1]][1]:
+            T = 0
+            E = 0
+        else:
+            T=0
+            E=1
+        r2 = (data[J[1]][2]*E) + (data[J[1]][3]*T)
+        return r1+r2
+    
+    
+    if res[tuple(J[:S-1])][0] + data[j][0] > data[j][1]:
+        T=1
+        E=0
+    elif res[tuple(J[:S-1])][0] + data[j][0]== data[j][1]:
+        T=0
+        E=0
+    else:
+        T=0
+        E=1
+    
+    return (data[j][2]*E) + (data[j][3]*T)        
     
 
 def F(S,J):
@@ -46,7 +61,7 @@ def F(S,J):
 #si la taille est 1 alors directement remplir sa case dans res avec pj, si j est en retard ou non, la séquance 
 #n'est que [j] et j est à la fin
     if S == 1: 
-        res[tuple(J)]=[ data[J[0]][0], calculateTardiness(S, J, J[0]), J, J[0]]
+        res[tuple(J)]=[ data[J[0]][0], calculerFonctionObjective(S, J, J[0]), J, J[0]]
         return 
     
 #si la taille est deux on teste les deux cas possibles et on prend leur min    
@@ -54,8 +69,8 @@ def F(S,J):
         tmp = []
         case1 = putLast(S, J, J[0])
         case2 = J.copy()
-        tmp.append(calculateTardiness(S, case1, J[0]) + res[tuple(case1[:S-1])][1])
-        tmp.append(calculateTardiness(S, case2, J[1]) + res[tuple(case2[:S-1])][1])
+        tmp.append(calculerFonctionObjective(S, case1, J[0]) + res[tuple(case1[:S-1])][1])
+        tmp.append(calculerFonctionObjective(S, case2, J[1]) + res[tuple(case2[:S-1])][1])
         finnished = data[J[0]][0] + data[J[1]][0]
         t=min(tmp)
         if tmp.index(t) == 0:
@@ -101,7 +116,9 @@ res={
 
 n=10
 
-data=getData("../instances/P1_n"+str(n)+".txt")
+data=getData2("../instances/P2_n"+str(n)+".txt")
+
+
 
 start = time.time()
 
@@ -159,7 +176,7 @@ for k in ks[-1:-len(ks):-1]:
 #renverser pour retrouver l'ordre début vers fin
 sequance = sequance[-1::-1]
 print("(une) Séquance optimale: ", sequance)
-print("Nombre de retard minimal : ", ress[1])
+print("Valeur minimale : ", ress[1])
 print("Temps de fin du séquance : ", ress[0])
 
 print("This Took", time.time()-start)

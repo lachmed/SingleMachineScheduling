@@ -99,14 +99,14 @@ res={
      }
 
 
-n=10
+n=50
 
 data=getData("../instances/P1_n"+str(n)+".txt")
 
 start = time.time()
 
 
-J = [i for i in range(1,11)]
+J = [i for i in range(1,21)]
 cpt = 0
 
 for r in range(1,len(J)+1):

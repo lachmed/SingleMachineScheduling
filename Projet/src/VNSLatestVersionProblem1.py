@@ -47,8 +47,9 @@ def LocalSearchVND(lmax,Nl,x1,data):
                 l=0 # et revenir au première structure de voisinnage
             else:
                 l+=1 # sinon conserver la même séquance et passer au structure de voisinnage suivante
-              
+         
         if time.time() - start > n*0.005: # si on dépasse un temps donné dans cette boucle alors arrêter (c'est la condition d'arrêt)            
+        #if time.time() - start > 200 :             
             break
     return x1
  
@@ -78,7 +79,9 @@ def VNS(x,Nk,kmax,Nl,lmax,data):
             else:
 #sinon continuer vers la structure de voisinnage suivante                
                 k+=1
+         
         if time.time() - start > n*0.005 : 
+        #if time.time() - start > 200 : 
 # après un temps déterminer sortir            
             stopCondition = True
     
@@ -86,14 +89,14 @@ def VNS(x,Nk,kmax,Nl,lmax,data):
 
     
 # stocker les structures de voisinnage (fonctions) dans les deux tables Nk et Nl    
-Nk= [ twoOpt, swap, insert]
+Nk= [twoOpt,insert, swap]
 kmax = len(Nk)
-Nl= [ twoOpt, swap, insert ]
+Nl= [twoOpt,insert,swap]
 lmax = len(Nl)
 
 #extraire les données du fichier
 
-n=10
+n=500
 
 data=getData("../instances/P1_n"+str(n)+".txt")
 
